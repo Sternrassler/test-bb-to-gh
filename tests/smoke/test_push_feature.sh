@@ -8,7 +8,7 @@ git checkout smoke-tests >/dev/null 2>&1
 
 for REMOTE in bitbucket github; do
   TMP_BRANCH="${TMP_PREFIX}_${REMOTE}"
-  echo "[feature-push] Versuch push auf ${REMOTE}/${TMP_BRANCH}"
+  echo "[feature-push] Push auf ${REMOTE}/${TMP_BRANCH}"
 
   git fetch "$REMOTE" "$BASE_BRANCH"
   git checkout -B "$TMP_BRANCH" "$REMOTE/$BASE_BRANCH" >/dev/null 2>&1
@@ -18,10 +18,10 @@ for REMOTE in bitbucket github; do
   git commit -m "smoke test feature push to $REMOTE" >/dev/null 2>&1
 
   if git push "$REMOTE" HEAD:"$TMP_BRANCH"; then
-    echo "PASS: feature push to $REMOTE succeeded"
+    echo "PASS: Feature-Push zu $REMOTE/${TMP_BRANCH} funktioniert"
     git push "$REMOTE" --delete "$TMP_BRANCH" >/dev/null 2>&1 || true
   else
-    echo "FAIL: feature push to $REMOTE failed"
+    echo "FAIL: Feature-Push zu $REMOTE/${TMP_BRANCH} fehlgeschlagen"
     git checkout smoke-tests >/dev/null 2>&1
     git branch -D "$TMP_BRANCH" >/dev/null 2>&1 || true
     rm -f smoke_feature.txt
